@@ -9,7 +9,7 @@ class EmployeeDataSource extends DataGridSource {
 
 …..
 
-@override
+ @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((DataGridCell cell) {
@@ -29,46 +29,12 @@ class EmployeeDataSource extends DataGridSource {
                   SizedBox(
                     width: 40,
                     child: Builder(builder: (context) {
-                      int rowIndex = datagridRows.indexOf(row);
+                      datagridRows.indexOf(row);
                       return IconButton(
                         hoverColor: Colors.transparent,
                         color: Colors.blue,
                         icon: const Icon(Icons.expand_more),
-                        onPressed: (() {
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                  scrollable: true,
-                                  titleTextStyle: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                  title: const Text('Personal Details'),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: (() {
-                                          Navigator.pop(context);
-                                        }),
-                                        child: const Text('Close'))
-                                  ],
-                                  content: Container(
-                                    margin: const EdgeInsets.all(20),
-                                    child: Row(
-                                      children: [
-                                        const SizedBox(width: 20),
-                                        Text(
-                                            'Employee address \n \n${employees[rowIndex].address}'),
-                                        const SizedBox(width: 20),
-                                        Text(
-                                            'City \n \n${employees[rowIndex].city}'),
-                                        const SizedBox(width: 20),
-                                        Text(
-                                            'Country \n \n${employees[rowIndex].country}'),
-                                        const SizedBox(width: 20),
-                                      ],
-                                    ),
-                                  )));
-                        }),
+                        onPressed: () => _showDetailsDialog(context, row),
                       );
                     }),
                   )
@@ -86,6 +52,41 @@ class EmployeeDataSource extends DataGridSource {
               ),
       );
     }).toList());
+  }
+
+  void _showDetailsDialog(BuildContext context, DataGridRow row) {
+    int rowIndex = datagridRows.indexOf(row);
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        scrollable: true,
+        titleTextStyle: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+        title: const Text('Personal Details'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+        content: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Employee address: ${employees[rowIndex].address}'),
+              const SizedBox(height: 10),
+              Text('City: ${employees[rowIndex].city}'),
+              const SizedBox(height: 10),
+              Text('Country: ${employees[rowIndex].country}'),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 ```
